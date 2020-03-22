@@ -11,11 +11,10 @@ import java.util.Map;
 
 public class Model implements IModel {
 
-    private ShipsMap playerMap;
     private ModelListener listener;
 
+    private ShipsMap playerMap;
     private ShipsMap aiMap;
-
 
     public Model() {
         initImages();

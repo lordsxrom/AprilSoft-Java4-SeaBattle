@@ -9,7 +9,7 @@ public class Utils {
     public static final int ROWS = 10;
     public static final int COLS = 10;
 
-    public static final int HORISONTAL = 0;
+    public static final int HORIZONTAL = 0;
     public static final int VERTICAL = 1;
 
     private static Random random = new Random();

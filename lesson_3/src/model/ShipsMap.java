@@ -45,11 +45,11 @@ public class ShipsMap {
         while (true) {
             boolean flag = false;
             Coord coord = Utils.getRandomCoord();
-            int dir = (int) (Math.random() * 4);
+            int dir = (int) (Math.random() * 2);
 
             if (tryPlaceDeck(coord)) {
                 switch (dir) {
-                    case Utils.HORISONTAL:
+                    case Utils.HORIZONTAL:
                         if (tryPlaceDeck(new Coord(coord.x + (size - 1), coord.y))) flag = true;
                         break;
                     case Utils.VERTICAL:
