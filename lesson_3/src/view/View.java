@@ -1,7 +1,7 @@
 package view;
 
-import presenter.ViewListener;
 import model.Utils;
+import presenter.ViewListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -91,7 +91,7 @@ public class View implements IView {
     public void setListener(ViewListener listener) {
         this.listener = listener;
     }
-    
+
     @Override
     public void updateState(int state) {
         String message;
@@ -107,21 +107,17 @@ public class View implements IView {
             return;
         }
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                int action = JOptionPane.showConfirmDialog(null,
-                        message,
-                        title,
-                        JOptionPane.YES_NO_OPTION);
+        int action = JOptionPane.showConfirmDialog(null,
+                message,
+                title,
+                JOptionPane.YES_NO_OPTION);
 
-                if (action == JOptionPane.YES_OPTION) {
-                    listener.onStartButtonPressed();
-                } else {
-                    System.exit(0);
-                }
-            }
-        }).start();
+        if (action == JOptionPane.YES_OPTION) {
+            listener.onStartButtonPressed();
+        } else {
+            System.exit(0);
+        }
+
     }
 
     @Override
