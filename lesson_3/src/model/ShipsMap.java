@@ -31,21 +31,15 @@ public class ShipsMap {
 
     public void placeShips() {
         place(4);
-        place(4);
-        place(4);
-        place(4);
-        place(4);
-        place(4);
-        place(4);
-//        for (int i = 0; i < 2; i++) {
-//            place(3);
-//        }
-//        for (int i = 0; i < 3; i++) {
-//            place(2);
-//        }
-//        for (int i = 0; i < 4; i++) {
-//            place(1);
-//        }
+        for (int i = 0; i < 2; i++) {
+            place(3);
+        }
+        for (int i = 0; i < 3; i++) {
+            place(2);
+        }
+        for (int i = 0; i < 4; i++) {
+            place(1);
+        }
         clearMapFromMisses();
     }
 
