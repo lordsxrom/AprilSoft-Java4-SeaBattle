@@ -11,6 +11,8 @@ public class ShipsMap {
     private Matrix map;
     private ArrayList<Ship> ships = new ArrayList<>();
 
+    private ShipDestroyedListener listener;
+
     public ShipsMap() {
         map = new Matrix(Box.SEA);
     }
@@ -29,15 +31,21 @@ public class ShipsMap {
 
     public void placeShips() {
         place(4);
-        for (int i = 0; i < 2; i++) {
-            place(3);
-        }
-        for (int i = 0; i < 3; i++) {
-            place(2);
-        }
-        for (int i = 0; i < 4; i++) {
-            place(1);
-        }
+        place(4);
+        place(4);
+        place(4);
+        place(4);
+        place(4);
+        place(4);
+//        for (int i = 0; i < 2; i++) {
+//            place(3);
+//        }
+//        for (int i = 0; i < 3; i++) {
+//            place(2);
+//        }
+//        for (int i = 0; i < 4; i++) {
+//            place(1);
+//        }
         clearMapFromMisses();
     }
 
@@ -84,6 +92,7 @@ public class ShipsMap {
             if (isDestroyed(ship)) setDestroyedOnShip(ship);
 
             setShipOnMap(ship);
+            listener.onShipHited(coord);
         }
     }
 
@@ -98,6 +107,7 @@ public class ShipsMap {
         }
         surroundShipWithMisses(ship);
         ships.remove(ship);
+        listener.onShipDestroyed();
     }
 
     private Ship getShipByCoord(Coord coord) {
@@ -146,4 +156,14 @@ public class ShipsMap {
     public ArrayList<Ship> getShips() {
         return ships;
     }
+
+    interface ShipDestroyedListener {
+        void onShipDestroyed();
+        void onShipHited(Coord coord);
+    }
+
+    public void setListener(ShipDestroyedListener listener) {
+        this.listener = listener;
+    }
+
 }

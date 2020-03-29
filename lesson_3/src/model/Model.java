@@ -7,6 +7,7 @@ import presenter.ModelListener;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class Model implements IModel {
@@ -16,11 +17,39 @@ public class Model implements IModel {
     private ShipsMap playerMap;
     private ShipsMap aiMap;
 
+    private AI ai;
+
     public Model() {
         initImages();
 
         playerMap = new ShipsMap();
+        playerMap.setListener(new ShipsMap.ShipDestroyedListener() {
+            @Override
+            public void onShipDestroyed() {
+                ai.clearPredictions();
+            }
+
+            @Override
+            public void onShipHited(Coord coord) {
+                ai.addPredictionsAround(getPredictionCoords(coord));
+                ai.improvePredictions(coord);
+            }
+        });
+
         aiMap = new ShipsMap();
+        aiMap.setListener(new ShipsMap.ShipDestroyedListener() {
+            @Override
+            public void onShipDestroyed() {
+
+            }
+
+            @Override
+            public void onShipHited(Coord coord) {
+
+            }
+        });
+
+        ai = new AI();
     }
 
     private void initImages() {
@@ -64,7 +93,7 @@ public class Model implements IModel {
 
     private void aiTurn() {
         while (true) {
-            Coord coord = Utils.getRandomCoord();
+            Coord coord = ai.turn();
             Box box = playerMap.getMap().getBox(coord);
             if (box == Box.DECK) {
                 playerMap.setHitOnDeck(coord);
@@ -74,8 +103,8 @@ public class Model implements IModel {
                     break;
                 }
             } else if (box == Box.SEA) {
-                listener.updatePlayerMap(drawPlayerMap(playerMap));
                 playerMap.setMissOnSea(coord);
+                listener.updatePlayerMap(drawPlayerMap(playerMap));
                 break;
             }
         }
@@ -115,5 +144,37 @@ public class Model implements IModel {
         return img;
     }
 
+    public ArrayList<Coord> getPredictionCoords(Coord coord) {
+        ArrayList<Coord> list = new ArrayList<>();
 
+        Coord left = new Coord(coord.x - 1, coord.y);
+        if (Utils.inRange(left) &&
+                (playerMap.getMap().getBox(left) == Box.SEA ||
+                        playerMap.getMap().getBox(left) == Box.DECK)) {
+            list.add(left);
+        }
+
+        Coord right = new Coord(coord.x + 1, coord.y);
+        if (Utils.inRange(right) &&
+                (playerMap.getMap().getBox(right) == Box.SEA ||
+                        playerMap.getMap().getBox(right) == Box.DECK)) {
+            list.add(right);
+        }
+
+        Coord up = new Coord(coord.x, coord.y - 1);
+        if (Utils.inRange(up) &&
+                (playerMap.getMap().getBox(up) == Box.SEA ||
+                        playerMap.getMap().getBox(up) == Box.DECK)) {
+            list.add(up);
+        }
+
+        Coord down = new Coord(coord.x, coord.y + 1);
+        if (Utils.inRange(down) &&
+                (playerMap.getMap().getBox(down) == Box.SEA ||
+                        playerMap.getMap().getBox(down) == Box.DECK)) {
+            list.add(down);
+        }
+
+        return list;
+    }
 }
